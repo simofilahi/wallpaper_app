@@ -1,83 +1,142 @@
 import React, {Component} from 'react';
-import axios from 'axios';
-import DisplayScreen from './DisplayScreen';
-import {rooturl, key, method, page, info_level} from '../../config';
+import {
+  StyleSheet,
+  StatusBar,
+  TouchableHighlight,
+  TouchableOpacity,
+} from 'react-native';
+import {View, Text, Button, Icon} from 'native-base';
+import LinearGradient from 'react-native-linear-gradient';
+import colors from '../colors/colors';
+import Ripple from 'react-native-material-ripple';
+import {
+  Menu,
+  MenuOptions,
+  MenuOption,
+  MenuTrigger,
+} from 'react-native-popup-menu';
 
-export default class FavoriteScreen extends Component {
+class FavoriteHeader extends Component {
   state = {
-    data: [],
-    images: [],
-    isImageViewVisible: false,
-    ServerError: false,
-    index: 1,
+    flag: false,
   };
-
-  loadingFunc = (ID, boolean) => {
-    this.setState({
-      data: this.state.data.map((elem) => {
-        if (elem.ID === ID) {
-          return {
-            ...elem,
-            loading: boolean,
-          };
-        }
-        return elem;
-      }),
-    });
-  };
-
-  isImageViewVisibleFunc = (boolean) => {
-    this.setState({
-      isImageViewVisible: boolean,
-    });
-  };
-  addurl = (url) => {
-    this.setState(
-      {
-        images: [
-          {
-            source: {uri: url},
-            // title: 'Paris',
-            width: 806,
-            height: 720,
-          },
-        ],
-      },
-      () => {
-        this.isImageViewVisibleFunc(true);
-      },
-    );
-  };
-
   componentDidMount() {
-    const url = `${rooturl}${key}${method}popular${page}${this.state.index}${info_level}2`;
-    console.log(url);
-    axios
-      .get(url)
-      .then((res) => {
-        this.setState({
-          data: res.data.wallpapers.map((elem, index) => {
-            return {...elem, ID: index, loading: true};
-          }),
-        });
-      })
-      .catch((err) => {
-        this.setState({
-          ServerError: true,
-        });
-      });
+    console.log('props ==> ', this.props.navigation);
+    // alert('yoyooyoyoyo ********');
   }
-
   render() {
     return (
-      <>
-        <DisplayScreen
-          state={this.state}
-          isImageViewVisibleFunc={this.isImageViewVisibleFunc}
-          loadingFunc={this.loadingFunc}
-          addurl={this.addurl}
-        />
-      </>
+      <LinearGradient
+        start={{x: 0, y: 0}}
+        end={{x: 1, y: 0}}
+        colors={['#000000', '#E84393']}
+        style={styles.linearGradient}>
+        <StatusBar backgroundColor="black" />
+        <View style={styles.menuIcon}>
+          <Ripple
+            rippleContainerBorderRadius={200}
+            rippleCentered={true}
+            rippleFades={false}
+            onPress={() => {
+              setTimeout(() => {
+                this.props.navigation.goBack();
+              }, 300);
+            }}>
+            <TouchableOpacity style={styles.button}>
+              <Icon name="md-arrow-back" type="Ionicons" style={styles.Icon} />
+            </TouchableOpacity>
+          </Ripple>
+        </View>
+        <View style={styles.title}>
+          <Text style={styles.text}>Favorites</Text>
+        </View>
+        <View style={styles.settingIcon}>
+          <Menu>
+            <MenuTrigger>
+              {/* <Ripple
+                rippleContainerBorderRadius={200}
+                rippleCentered={true}
+                rippleFades={false}
+                onPress={() => {
+                  this.setState({flag: true});
+                }}> */}
+              {/* <TouchableOpacity style={styles.button}> */}
+              <Icon name="more-vertical" type="Feather" style={styles.Icon} />
+              {/* </TouchableOpacity> */}
+              {/* </Ripple> */}
+            </MenuTrigger>
+            <MenuOptions>
+              <MenuOption
+                onSelect={(e) => {
+                  this.setState({
+                    flag: false,
+                  });
+                }}>
+                <Text style={{color: 'black'}}>Feedback</Text>
+              </MenuOption>
+              <MenuOption
+                onSelect={(e) => {
+                  this.setState({
+                    flag: false,
+                  });
+                }}>
+                <Text style={{color: 'black'}}>Privacy Policy</Text>
+              </MenuOption>
+            </MenuOptions>
+          </Menu>
+        </View>
+      </LinearGradient>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  linearGradient: {
+    flexDirection: 'row',
+    height: 58,
+    width: '100%',
+    borderBottomWidth: 1.5,
+    elevation: 0,
+  },
+  container: {
+    flex: 1,
+  },
+  menuIcon: {
+    width: 60,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  title: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  favoriteIcon: {
+    width: 60,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  settingIcon: {
+    width: 60,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  text: {
+    color: colors.white,
+    fontSize: 24,
+    fontWeight: 'normal',
+  },
+  button: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 40,
+    width: 40,
+    borderRadius: 100,
+  },
+  Icon: {
+    color: colors.white,
+    fontSize: 24,
+  },
+});
+
+export default FavoriteHeader;

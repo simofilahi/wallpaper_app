@@ -41,6 +41,8 @@ const AppDrawerNavigator = createDrawerNavigator(
     Abstract: AbstractScreen,
     Animal: AnimalScreen,
     Artistic: ArtisticScreen,
+    Dark: DarkScreen,
+    Earth: EarthScreen,
     Celebrity: CelebrityScreen,
     Comics: ComicsScreen,
     Fantasy: FantasyScreen,

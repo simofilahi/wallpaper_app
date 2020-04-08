@@ -6,19 +6,22 @@ import colors from '../../colors/colors';
 export class ServerError extends Component {
   render() {
     return (
-      <View style={styles.container}>
-        <ScrollView>
-          <Icon
-            name="exclamation-circle"
-            type="FontAwesome"
-            style={styles.Icon}
-          />
+      <ScrollView contentContainerStyle={styles.container}>
+        <Icon
+          name="exclamation-circle"
+          type="FontAwesome"
+          style={styles.Icon}
+        />
+        {this.props.flag === 1 && (
+          <Text style={styles.text}>Please check your internet</Text>
+        )}
+        {this.props.flag === 2 && (
           <Text style={styles.text}>
             the server not working we do maintenace, {'\n'} please try a few
             time
           </Text>
-        </ScrollView>
-      </View>
+        )}
+      </ScrollView>
     );
   }
 }

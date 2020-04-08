@@ -9,6 +9,12 @@ import {View, Text, Button, Icon} from 'native-base';
 import LinearGradient from 'react-native-linear-gradient';
 import colors from '../colors/colors';
 import Ripple from 'react-native-material-ripple';
+import {
+  Menu,
+  MenuOptions,
+  MenuOption,
+  MenuTrigger,
+} from 'react-native-popup-menu';
 
 class IndexHeader extends Component {
   componentDidMount() {
@@ -57,19 +63,39 @@ class IndexHeader extends Component {
           </Ripple>
         </View>
         <View style={styles.settingIcon}>
-          <Ripple
-            rippleContainerBorderRadius={200}
-            rippleCentered={true}
-            rippleFades={false}
-            onPress={() => {
-              setTimeout(() => {
-                this.props.navigation.navigate('Favorite');
-              }, 300);
-            }}>
-            <TouchableOpacity style={styles.button}>
+          <Menu>
+            <MenuTrigger>
+              {/* <Ripple
+                rippleContainerBorderRadius={200}
+                rippleCentered={true}
+                rippleFades={false}
+                onPress={() => {
+                  this.setState({flag: true});
+                }}> */}
+              {/* <TouchableOpacity style={styles.button}> */}
               <Icon name="more-vertical" type="Feather" style={styles.Icon} />
-            </TouchableOpacity>
-          </Ripple>
+              {/* </TouchableOpacity> */}
+              {/* </Ripple> */}
+            </MenuTrigger>
+            <MenuOptions>
+              <MenuOption
+                onSelect={(e) => {
+                  this.setState({
+                    flag: false,
+                  });
+                }}>
+                <Text style={{color: 'black'}}>Feedback</Text>
+              </MenuOption>
+              <MenuOption
+                onSelect={(e) => {
+                  this.setState({
+                    flag: false,
+                  });
+                }}>
+                <Text style={{color: 'black'}}>Privacy Policy</Text>
+              </MenuOption>
+            </MenuOptions>
+          </Menu>
         </View>
       </LinearGradient>
     );

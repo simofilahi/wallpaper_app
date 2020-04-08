@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import axios from 'axios';
 import DisplayScreen from './DisplayScreen';
+import NetInfo from '@react-native-community/netinfo';
 import {rooturl, key, method, page, info_level} from '../../config';
 
 export default class HomeScreen extends Component {
@@ -10,6 +11,8 @@ export default class HomeScreen extends Component {
     isImageViewVisible: false,
     ServerError: false,
     index: 1,
+    isConnected: false,
+    isInternetReachable: false,
   };
 
   loadingFunc = (ID, boolean) => {
@@ -51,64 +54,76 @@ export default class HomeScreen extends Component {
   };
 
   callapi = () => {
-    this.setState({index: this.state.index + 1}, () => {
-      const url = `${rooturl}${key}${method}popular${page}${this.state.index}${info_level}2`;
-      console.log(url);
-      axios
-        .get(url)
-        .then((res) => {
-          const obj = res.data.wallpapers.map((elem, index) => {
-            return {...elem, ID: index, loading: true};
+    return new Promise((resolve, reject) => {
+      this.setState({index: this.state.index + 1}, () => {
+        const url = `${rooturl}${key}${method}popular${page}${this.state.index}${info_level}2`;
+        console.log(url);
+        axios
+          .get(url)
+          .then((res) => {
+            const obj = res.data.wallpapers.map((elem, index) => {
+              return {...elem, ID: index, loading: true};
+            });
+            this.setState(
+              {
+                data: this.state.data.concat(obj),
+              },
+              () => {
+                resolve('yes');
+              },
+            );
+          })
+          .catch((err) => {
+            this.setState({
+              ServerError: true,
+            });
+            reject('failed');
           });
-          this.setState(
-            {
-              data: this.state.data.concat(obj),
-            },
-            () => {
-              console.log('data***************** ==> ', this.state.data);
-              // this.state.data.map((elem) => {
-              //   console.log('elem ==> ', elem);
-              // });
-            },
-          );
-        })
-        .catch((err) => {
-          this.setState({
-            ServerError: true,
-          });
-        });
+      });
     });
   };
 
+  componentWillUnmount() {
+    this.unsubscribe();
+  }
+
   componentDidMount() {
-    const url = `${rooturl}${key}${method}popular${page}${this.state.index}${info_level}2`;
-    console.log(url);
-    axios
-      .get(url)
-      .then((res) => {
+    this.unsubscribe = NetInfo.addEventListener((state) => {
+      if (state.isConnected && state.isInternetReachable) {
         this.setState(
           {
-            data: res.data.wallpapers.map((elem, index) => {
-              return {...elem, ID: index, loading: true};
-            }),
+            isConnected: state.isConnected,
+            isInternetReachable: state.isInternetReachable,
           },
           () => {
-            console.log('data first ==> ', this.state.data);
+            const url = `${rooturl}${key}${method}popular${page}${this.state.index}${info_level}2`;
+            console.log(url);
+            axios
+              .get(url)
+              .then((res) => {
+                this.setState({
+                  data: res.data.wallpapers.map((elem, index) => {
+                    return {...elem, ID: index, loading: true};
+                  }),
+                });
+              })
+              .catch((err) => {
+                this.setState({
+                  ServerError: true,
+                });
+              });
           },
         );
-      })
-      .catch((err) => {
+      } else {
         this.setState({
-          ServerError: true,
+          isConnected: state.isConnected,
+          isInternetReachable: state.isInternetReachable,
         });
-      });
+      }
+    });
   }
 
   render() {
-    // this.state.data.map((elem) => {
-    //   console.log('elem ==> ', elem);
-    // });
-
     return (
       <>
         <DisplayScreen

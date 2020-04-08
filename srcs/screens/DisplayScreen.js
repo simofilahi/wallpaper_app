@@ -10,9 +10,13 @@ import {
   Image,
   ActivityIndicator,
 } from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
+import Ripple from 'react-native-material-ripple';
 
 export class DisplayScreen extends Component {
+  state = {
+    onScroll: false,
+  };
+
   isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}) => {
     const paddingToBottom = 20;
     return (
@@ -22,26 +26,42 @@ export class DisplayScreen extends Component {
   };
 
   render() {
+    let flag = 0;
+    if (
+      !this.props.state.isConnected &&
+      !this.props.state.isInternetReachable
+    ) {
+      flag = 1;
+    } else if (this.props.state.ServerError) {
+      flag = 2;
+    }
     return (
       <LinearGradient
         start={{x: 0, y: 0}}
         end={{x: 1, y: 0}}
         colors={['#434343', '#000000']}
         style={styles.linearGradient}>
-        {this.props.state.ServerError ? (
-          <ServerError />
+        {flag === 1 || flag === 2 ? (
+          <ServerError flag={flag} />
         ) : (
           <FlatGrid
             itemDimension={100}
             items={this.props.state.data}
             onScroll={(e) => {
               if (this.isCloseToBottom(e.nativeEvent)) {
-                this.props.callapi();
+                this.setState({
+                  onScroll: true,
+                });
+                this.props
+                  .callapi()
+                  .then(() => {
+                    this.setState({
+                      onScroll: false,
+                    });
+                  })
+                  .catch((err) => {});
               }
             }}
-            // style={styles.gridView}
-            // staticDimension={300}
-            // fixed
             spacing={1}
             renderItem={({item, index}) => (
               <View style={styles.itemContainer}>
@@ -57,38 +77,53 @@ export class DisplayScreen extends Component {
                         uri: item.url_thumb,
                       }}
                       onLoadEnd={() => {
-                        // alert('yes');
-                        //   this.setState({loading: false});
                         this.props.loadingFunc(item.ID, false);
                       }}
                     />
                   </>
                 ) : (
-                  <TouchableHighlight
+                  <Ripple
                     style={{flex: 1}}
-                    onPress={() => this.props.addurl(item.url_image)}>
-                    <Image
-                      source={{
-                        uri: item.url_thumb,
-                      }}
-                      //   onLoadEnd={() => {
-                      //     // alert('yes');
-                      //     //   this.setState({loading: false});
-                      //     this.props.loadingFunc(item.ID, false);
-                      //   }}
-                      style={{height: 250, width: 'auto', flex: 1}}
-                    />
-                  </TouchableHighlight>
+                    onPress={() => {
+                      this.props.addurl(item.url_image);
+                    }}>
+                    <TouchableHighlight style={{flex: 1}}>
+                      <Image
+                        source={{
+                          uri: item.url_thumb,
+                        }}
+                        style={{height: 250, width: 'auto', flex: 1}}
+                      />
+                    </TouchableHighlight>
+                  </Ripple>
                 )}
               </View>
             )}
           />
         )}
-        <ImageViewer
-          images={this.props.state.images}
-          isImageViewVisibleFunc={this.props.isImageViewVisibleFunc}
-          isImageViewVisible={this.props.state.isImageViewVisible}
-        />
+        <View>
+          <ImageViewer
+            images={this.props.state.images}
+            isImageViewVisibleFunc={this.props.isImageViewVisibleFunc}
+            isImageViewVisible={this.props.state.isImageViewVisible}
+          />
+        </View>
+        {this.state.onScroll && (
+          <View
+            style={{
+              height: 50,
+              width: 50,
+              alignSelf: 'center',
+              justifyContent: 'center',
+              alignContent: 'center',
+            }}>
+            <ActivityIndicator
+              size="small"
+              color="#E84393"
+              style={{alignSelf: 'center'}}
+            />
+          </View>
+        )}
       </LinearGradient>
     );
   }
