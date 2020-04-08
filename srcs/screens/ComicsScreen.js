@@ -3,7 +3,7 @@ import axios from 'axios';
 import DisplayScreen from './DisplayScreen';
 import {rooturl, key, method, page, info_level} from '../../config';
 
-export default class AbstractScreen extends Component {
+export default class ComicsScreen extends Component {
   state = {
     data: [],
     images: [],
@@ -50,7 +50,7 @@ export default class AbstractScreen extends Component {
   };
 
   componentDidMount() {
-    const url = `${rooturl}${key}${method}popular${page}${this.state.index}${info_level}2`;
+    const url = `${rooturl}${key}${method}comics${page}${this.state.index}${info_level}2`;
     console.log(url);
     axios
       .get(url)
@@ -69,10 +69,6 @@ export default class AbstractScreen extends Component {
   }
 
   render() {
-    // this.state.data.map((elem) => {
-    //   console.log('elem ==> ', elem);
-    // });
-
     return (
       <>
         <DisplayScreen

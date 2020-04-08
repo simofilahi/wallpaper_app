@@ -1,113 +1,83 @@
 import React, {Component} from 'react';
-import {
-  StyleSheet,
-  StatusBar,
-  TouchableHighlight,
-  TouchableOpacity,
-} from 'react-native';
-import {View, Text, Button, Icon} from 'native-base';
-import LinearGradient from 'react-native-linear-gradient';
-import colors from '../colors/colors';
-import Ripple from 'react-native-material-ripple';
+import axios from 'axios';
+import DisplayScreen from './DisplayScreen';
+import {rooturl, key, method, page, info_level} from '../../config';
 
-class FavoriteHeader extends Component {
+export default class FavoriteScreen extends Component {
+  state = {
+    data: [],
+    images: [],
+    isImageViewVisible: false,
+    ServerError: false,
+    index: 1,
+  };
+
+  loadingFunc = (ID, boolean) => {
+    this.setState({
+      data: this.state.data.map((elem) => {
+        if (elem.ID === ID) {
+          return {
+            ...elem,
+            loading: boolean,
+          };
+        }
+        return elem;
+      }),
+    });
+  };
+
+  isImageViewVisibleFunc = (boolean) => {
+    this.setState({
+      isImageViewVisible: boolean,
+    });
+  };
+  addurl = (url) => {
+    this.setState(
+      {
+        images: [
+          {
+            source: {uri: url},
+            // title: 'Paris',
+            width: 806,
+            height: 720,
+          },
+        ],
+      },
+      () => {
+        this.isImageViewVisibleFunc(true);
+      },
+    );
+  };
+
   componentDidMount() {
-    console.log('props ==> ', this.props.navigation);
-    // alert('yoyooyoyoyo ********');
+    const url = `${rooturl}${key}${method}popular${page}${this.state.index}${info_level}2`;
+    console.log(url);
+    axios
+      .get(url)
+      .then((res) => {
+        this.setState({
+          data: res.data.wallpapers.map((elem, index) => {
+            return {...elem, ID: index, loading: true};
+          }),
+        });
+      })
+      .catch((err) => {
+        this.setState({
+          ServerError: true,
+        });
+      });
   }
+
   render() {
     return (
-      <LinearGradient
-        start={{x: 0, y: 0}}
-        end={{x: 1, y: 0}}
-        colors={['#000000', '#E84393']}
-        style={styles.linearGradient}>
-        <StatusBar backgroundColor="black" />
-        <View style={styles.menuIcon}>
-          <Ripple
-            rippleContainerBorderRadius={200}
-            rippleCentered={true}
-            rippleFades={false}
-            onPress={() => {
-              setTimeout(() => {
-                this.props.navigation.goBack();
-              }, 300);
-            }}>
-            <TouchableOpacity style={styles.button}>
-              <Icon name="md-arrow-back" type="Ionicons" style={styles.Icon} />
-            </TouchableOpacity>
-          </Ripple>
-        </View>
-        <View style={styles.title}>
-          <Text style={styles.text}>Favorites</Text>
-        </View>
-        <View style={styles.settingIcon}>
-          <Ripple
-            rippleContainerBorderRadius={200}
-            rippleCentered={true}
-            rippleFades={false}
-            onPress={() => {
-              setTimeout(() => {
-                this.props.navigation.navigate('Favorite');
-              }, 300);
-            }}>
-            <TouchableOpacity style={styles.button}>
-              <Icon name="more-vertical" type="Feather" style={styles.Icon} />
-            </TouchableOpacity>
-          </Ripple>
-        </View>
-      </LinearGradient>
+      <>
+        <DisplayScreen
+          state={this.state}
+          isImageViewVisibleFunc={this.isImageViewVisibleFunc}
+          loadingFunc={this.loadingFunc}
+          addurl={this.addurl}
+        />
+      </>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  linearGradient: {
-    flexDirection: 'row',
-    height: 58,
-    width: '100%',
-    borderBottomWidth: 1.5,
-    elevation: 0,
-  },
-  container: {
-    flex: 1,
-  },
-  menuIcon: {
-    width: 60,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  title: {
-    flex: 1,
-    justifyContent: 'center',
-  },
-  favoriteIcon: {
-    width: 60,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  settingIcon: {
-    width: 60,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  text: {
-    color: colors.white,
-    fontSize: 24,
-    fontWeight: 'normal',
-  },
-  button: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: 40,
-    width: 40,
-    borderRadius: 100,
-  },
-  Icon: {
-    color: colors.white,
-    fontSize: 24,
-  },
-});
-
-export default FavoriteHeader;

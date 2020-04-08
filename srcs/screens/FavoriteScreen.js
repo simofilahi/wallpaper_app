@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Text, View, StyleSheet} from 'react-native';
 import FavoriteHeader from './FavoriteHeader';
+import LinearGradient from 'react-native-linear-gradient';
 
 export class FavoriteScreen extends Component {
   static navigationOptions = ({navigation}) => {
@@ -23,6 +24,10 @@ export class FavoriteScreen extends Component {
   }
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  linearGradient: {
+    flex: 1,
+  },
+});
 
 export default FavoriteScreen;

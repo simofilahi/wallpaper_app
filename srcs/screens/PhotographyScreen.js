@@ -3,7 +3,7 @@ import axios from 'axios';
 import DisplayScreen from './DisplayScreen';
 import {rooturl, key, method, page, info_level} from '../../config';
 
-export default class AbstractScreen extends Component {
+export default class PhotographyScreen extends Component {
   state = {
     data: [],
     images: [],

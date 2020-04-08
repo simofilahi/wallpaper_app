@@ -7,6 +7,7 @@ import colors from '../colors/colors';
 
 export default class ImageViewer extends Component {
   render() {
+    // console.log('prosp ==> ', this.props);
     return (
       <ImageView
         onClose={() => {
@@ -26,7 +27,11 @@ export default class ImageViewer extends Component {
                 <Text style={styles.text}>Favorite</Text>
               </View>
               <View style={styles.item_2}>
-                <TouchableOpacity style={styles.button}>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() => {
+                    downloadImage(this.props.images[0].source.uri);
+                  }}>
                   <Icon name="download" type="Feather" style={styles.Icon} />
                 </TouchableOpacity>
                 <Text style={styles.text}>Download</Text>
@@ -39,10 +44,6 @@ export default class ImageViewer extends Component {
     );
   }
 }
-
-// onPress={() => {
-//     downloadImage(this.props.images[0].source.uri);
-//   }}
 
 const styles = StyleSheet.create({
   container: {

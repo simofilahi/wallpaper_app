@@ -11,8 +11,7 @@ const CustomDrawerContentComponent = (props) => (
     end={{x: 1, y: 0}}
     colors={['#434343', '#000000']}
     style={styles.linearGradient}>
-    <ScrollView contentContainerStyle={styles.container}>
-      <View style={{height: 0, backgroundColor: 'green'}}></View>
+    <ScrollView>
       <SafeAreaView style={styles.container}>
         <DrawerItems {...props} />
       </SafeAreaView>
