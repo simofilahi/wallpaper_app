@@ -47,19 +47,22 @@ export class DisplayScreen extends Component {
           <FlatGrid
             itemDimension={100}
             items={this.props.state.data}
+            spacing={0.1}
             onScroll={(e) => {
-              if (this.isCloseToBottom(e.nativeEvent)) {
-                this.setState({
-                  onScroll: true,
-                });
-                this.props
-                  .callapi()
-                  .then(() => {
-                    this.setState({
-                      onScroll: false,
-                    });
-                  })
-                  .catch((err) => {});
+              if (this.props.favoriteFlag === 0) {
+                if (this.isCloseToBottom(e.nativeEvent)) {
+                  this.setState({
+                    onScroll: true,
+                  });
+                  this.props
+                    .callapi()
+                    .then(() => {
+                      this.setState({
+                        onScroll: false,
+                      });
+                    })
+                    .catch((err) => {});
+                }
               }
             }}
             spacing={1}
@@ -74,7 +77,7 @@ export class DisplayScreen extends Component {
                     />
                     <Image
                       source={{
-                        uri: item.url_thumb,
+                        uri: item.url_image,
                       }}
                       onLoadEnd={() => {
                         this.props.loadingFunc(item.ID, false);
@@ -85,14 +88,14 @@ export class DisplayScreen extends Component {
                   <Ripple
                     style={{flex: 1}}
                     onPress={() => {
-                      this.props.addurl(item.url_image);
+                      this.props.addurl(item.url_image, item.url_thumb);
                     }}>
                     <TouchableHighlight style={{flex: 1}}>
                       <Image
                         source={{
-                          uri: item.url_thumb,
+                          uri: item.url_image,
                         }}
-                        style={{height: 250, width: 'auto', flex: 1}}
+                        style={{height: 200, width: 'auto'}}
                       />
                     </TouchableHighlight>
                   </Ripple>
@@ -101,13 +104,17 @@ export class DisplayScreen extends Component {
             )}
           />
         )}
-        <View>
-          <ImageViewer
-            images={this.props.state.images}
-            isImageViewVisibleFunc={this.props.isImageViewVisibleFunc}
-            isImageViewVisible={this.props.state.isImageViewVisible}
-          />
-        </View>
+        {this.props.state.isImageViewVisible && (
+          <View>
+            <ImageViewer
+              images={this.props.state.images}
+              isImageViewVisibleFunc={this.props.isImageViewVisibleFunc}
+              isImageViewVisible={this.props.state.isImageViewVisible}
+              updatedata={this.props.updatedata}
+              favoriteFlag={this.props.favoriteFlag}
+            />
+          </View>
+        )}
         {this.state.onScroll && (
           <View
             style={{
@@ -142,8 +149,8 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     backgroundColor: 'white',
     borderRadius: 0,
-    margin: 2,
-    height: 150,
+    margin: 0.5,
+    height: 200,
   },
   itemName: {
     fontSize: 16,

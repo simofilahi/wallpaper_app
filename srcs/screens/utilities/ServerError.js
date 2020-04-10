@@ -16,10 +16,16 @@ export class ServerError extends Component {
           <Text style={styles.text}>Please check your internet</Text>
         )}
         {this.props.flag === 2 && (
-          <Text style={styles.text}>
-            the server not working we do maintenace, {'\n'} please try a few
-            time
-          </Text>
+          <View style={styles.wrapper}>
+            <View style={styles.item}>
+              <Text style={styles.text}>
+                Sorry, server down for maintenance, {'\n'}
+              </Text>
+            </View>
+            <View style={styles.item}>
+              <Text style={styles.text}>please try later </Text>
+            </View>
+          </View>
         )}
       </ScrollView>
     );
@@ -39,6 +45,15 @@ const styles = StyleSheet.create({
   text: {
     marginTop: 20,
     color: colors.white,
+  },
+  wrapper: {
+    marginTop: 15,
+  },
+  item: {
+    height: 15,
+    width: 400,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 export default ServerError;

@@ -4,7 +4,7 @@ import {ScrollView, StyleSheet, ImageBackground} from 'react-native';
 import {DrawerItems} from 'react-navigation-drawer';
 import LinearGradient from 'react-native-linear-gradient';
 
-const image = require('../assests/img.jpg');
+// const image = require('../assests/img.jpg');
 
 const CustomDrawerContentComponent = (props) => (
   <LinearGradient

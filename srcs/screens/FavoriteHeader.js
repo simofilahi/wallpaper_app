@@ -1,29 +1,14 @@
 import React, {Component} from 'react';
-import {
-  StyleSheet,
-  StatusBar,
-  TouchableHighlight,
-  TouchableOpacity,
-} from 'react-native';
+import {StyleSheet, StatusBar, TouchableOpacity} from 'react-native';
 import {View, Text, Button, Icon} from 'native-base';
 import LinearGradient from 'react-native-linear-gradient';
 import colors from '../colors/colors';
 import Ripple from 'react-native-material-ripple';
-import {
-  Menu,
-  MenuOptions,
-  MenuOption,
-  MenuTrigger,
-} from 'react-native-popup-menu';
 
 class FavoriteHeader extends Component {
   state = {
     flag: false,
   };
-  componentDidMount() {
-    console.log('props ==> ', this.props.navigation);
-    // alert('yoyooyoyoyo ********');
-  }
   render() {
     return (
       <LinearGradient
@@ -51,39 +36,17 @@ class FavoriteHeader extends Component {
           <Text style={styles.text}>Favorites</Text>
         </View>
         <View style={styles.settingIcon}>
-          <Menu>
-            <MenuTrigger>
-              {/* <Ripple
-                rippleContainerBorderRadius={200}
-                rippleCentered={true}
-                rippleFades={false}
-                onPress={() => {
-                  this.setState({flag: true});
-                }}> */}
-              {/* <TouchableOpacity style={styles.button}> */}
+          <Ripple
+            rippleContainerBorderRadius={200}
+            rippleCentered={true}
+            rippleFades={false}
+            onPress={() => {
+              this.props.navigation.navigate('Settings');
+            }}>
+            <TouchableOpacity style={styles.button}>
               <Icon name="more-vertical" type="Feather" style={styles.Icon} />
-              {/* </TouchableOpacity> */}
-              {/* </Ripple> */}
-            </MenuTrigger>
-            <MenuOptions>
-              <MenuOption
-                onSelect={(e) => {
-                  this.setState({
-                    flag: false,
-                  });
-                }}>
-                <Text style={{color: 'black'}}>Feedback</Text>
-              </MenuOption>
-              <MenuOption
-                onSelect={(e) => {
-                  this.setState({
-                    flag: false,
-                  });
-                }}>
-                <Text style={{color: 'black'}}>Privacy Policy</Text>
-              </MenuOption>
-            </MenuOptions>
-          </Menu>
+            </TouchableOpacity>{' '}
+          </Ripple>
         </View>
       </LinearGradient>
     );

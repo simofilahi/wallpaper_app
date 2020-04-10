@@ -8,7 +8,7 @@ import AnimalScreen from '../screens/AnimalScreen';
 import ArtisticScreen from '../screens/ArtisticScreen';
 import DarkScreen from '../screens/DarkScreen';
 import EarthScreen from '../screens/EearthScreen';
-import CelebrityScreen from '../screens/ArtisticScreen';
+import CelebrityScreen from '../screens/CelebrityScreen';
 import ComicsScreen from '../screens/ComicsScreen';
 import FantasyScreen from '../screens/FantasyScreen';
 import FoodScreen from '../screens/FoodScreen';
@@ -30,6 +30,8 @@ import VehiclesScreen from '../screens/VehiclesScreen';
 import VideogameScreen from '../screens/VideogameScreen';
 import WeaponsScrren from '../screens/WeaponsScrren';
 import WomenScreen from '../screens/WomenScreen';
+import SettingScreen from '../screens/SettingScreen';
+// import SplashScreen from '../screens/SplachScreen';
 
 import FavoriteScreen from '../screens/FavoriteScreen';
 import CustomDrawerContentComponent from './DrawerHeader';
@@ -86,14 +88,25 @@ const AppDrawerNavigator = createDrawerNavigator(
   },
 );
 
-const AppMain = createStackNavigator(
+const App = createStackNavigator(
   {
     app: AppDrawerNavigator,
     Favorite: FavoriteScreen,
+    Settings: SettingScreen,
   },
   {
     initialRouteName: 'app',
   },
 );
 
-export default createAppContainer(AppMain);
+// const AppMain = createSwitchNavigator(
+//   {
+//     app: App,
+//     Splash: SplashScreen,
+//   },
+//   {
+//     initialRouteName: 'app',
+//   },
+// );
+
+export default createAppContainer(App);

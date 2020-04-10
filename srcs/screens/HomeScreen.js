@@ -35,15 +35,16 @@ export default class HomeScreen extends Component {
     });
   };
 
-  addurl = (url) => {
+  addurl = (url_image, url_thumb) => {
     this.setState(
       {
         images: [
           {
-            source: {uri: url},
-            // title: 'Paris',
-            width: 806,
+            source: {uri: url_image},
+            width: 1000,
             height: 720,
+            url_thumb: url_thumb,
+            // title: 'Paris',
           },
         ],
       },
@@ -132,6 +133,7 @@ export default class HomeScreen extends Component {
           loadingFunc={this.loadingFunc}
           addurl={this.addurl}
           callapi={this.callapi}
+          favoriteFlag={0}
         />
       </>
     );

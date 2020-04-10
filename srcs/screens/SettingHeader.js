@@ -1,11 +1,14 @@
 import React, {Component} from 'react';
 import {StyleSheet, StatusBar, TouchableOpacity} from 'react-native';
-import {View, Text, Button, Icon} from 'native-base';
+import {View, Icon, Text} from 'native-base';
 import LinearGradient from 'react-native-linear-gradient';
 import colors from '../colors/colors';
 import Ripple from 'react-native-material-ripple';
 
-class IndexHeader extends Component {
+class SettingHeader extends Component {
+  state = {
+    flag: false,
+  };
   render() {
     return (
       <LinearGradient
@@ -21,46 +24,18 @@ class IndexHeader extends Component {
             rippleFades={false}
             onPress={() => {
               setTimeout(() => {
-                this.props.navigation.toggleDrawer();
+                this.props.navigation.goBack();
               }, 300);
             }}>
             <TouchableOpacity style={styles.button}>
-              <Icon name="bars" type="AntDesign" style={styles.Icon} />
+              <Icon name="md-arrow-back" type="Ionicons" style={styles.Icon} />
             </TouchableOpacity>
           </Ripple>
         </View>
         <View style={styles.title}>
-          <Text style={styles.text}>Wallpaper</Text>
+          <Text style={styles.text}>Setting</Text>
         </View>
-        <View style={styles.favoriteIcon}>
-          <Ripple
-            rippleContainerBorderRadius={200}
-            rippleCentered={true}
-            rippleFades={false}
-            onPress={() => {
-              setTimeout(() => {
-                this.props.navigation.navigate('Favorite');
-              }, 300);
-            }}>
-            <TouchableOpacity style={styles.button}>
-              <Icon name="heart" type="FontAwesome" style={styles.HeartIcon} />
-            </TouchableOpacity>
-          </Ripple>
-        </View>
-        <View style={styles.settingIcon}>
-          <Ripple
-            rippleContainerBorderRadius={200}
-            rippleCentered={true}
-            rippleFades={false}
-            onPress={() => {
-              console.log(this.props.navigation.navigate);
-              this.props.navigation.navigate('Settings');
-            }}>
-            <TouchableOpacity style={styles.button}>
-              <Icon name="more-vertical" type="Feather" style={styles.Icon} />
-            </TouchableOpacity>
-          </Ripple>
-        </View>
+        <View style={styles.settingIcon}></View>
       </LinearGradient>
     );
   }
@@ -71,9 +46,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     height: 58,
     width: '100%',
-    borderBottomWidth: 0.5,
-    elevation: null,
-    shadowOpacity: 0.9,
+    borderBottomWidth: 1.5,
+    elevation: 0,
   },
   container: {
     flex: 1,
@@ -110,14 +84,10 @@ const styles = StyleSheet.create({
     width: 40,
     borderRadius: 100,
   },
-  HeartIcon: {
-    color: colors.white,
-    fontSize: 24,
-  },
   Icon: {
     color: colors.white,
     fontSize: 24,
   },
 });
 
-export default IndexHeader;
+export default SettingHeader;

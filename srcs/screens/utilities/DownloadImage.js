@@ -14,7 +14,7 @@ const requestPermission = async () => {
         PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
         {
           title: 'Storage Permission',
-          message: 'App needs access to your storage to download Photos.',
+          message: 'App need access to your storage to download Photos.',
           // buttonNegative: 'Cancel',
           buttonPositive: 'OK',
         },

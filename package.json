@@ -10,6 +10,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@react-native-community/async-storage": "^1.9.0",
     "@react-native-community/masked-view": "^0.1.6",
     "@react-native-community/netinfo": "^5.7.0",
     "axios": "^0.19.2",
@@ -26,6 +27,8 @@
     "react-native-reanimated": "^1.7.0",
     "react-native-safe-area-context": "^0.7.3",
     "react-native-screens": "^2.2.0",
+    "react-native-share": "^3.2.0",
+    "react-native-simple-animations": "^0.2.2",
     "react-native-super-grid": "^3.2.0",
     "react-native-thumbnail-grid": "^0.3.0",
     "react-native-vector-icons": "^6.6.0",
